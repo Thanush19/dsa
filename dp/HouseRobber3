@@ -1,0 +1,32 @@
+class Solution {
+    public int rob(TreeNode root) {
+        HashMap<TreeNode, Integer> mp = new HashMap<>();
+        return helper(mp, root);
+    }
+
+    int helper(HashMap<TreeNode, Integer> mp, TreeNode root) {
+        if (root == null) return 0;
+        int ans = 0;
+
+        // Check if the result for the current node is already computed
+        if (mp.containsKey(root)) return mp.get(root);
+
+        // Calculate the maximum amount from left grandchildren
+        if (root.left != null) {
+            ans += helper(mp, root.left.left) + helper(mp, root.left.right);
+        }
+
+        // Calculate the maximum amount from right grandchildren
+        if (root.right != null) {
+            ans += helper(mp, root.right.left) + helper(mp, root.right.right);
+        }
+
+        // Determine the maximum amount for the current subtree
+        ans = Math.max(ans + root.val, helper(mp, root.left) + helper(mp, root.right));
+
+        // Store the result in the memoization map
+        mp.put(root, ans);
+
+        return ans;
+    }
+}

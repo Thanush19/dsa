@@ -1,0 +1,92 @@
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+
+class Solution {
+    /**
+     * Checks if the linked list is a subpath starting from any node in the binary tree.
+     *
+     * @param head The head of the linked list.
+     * @param root The root of the binary tree.
+     * @return True if the linked list is a subpath, false otherwise.
+     */
+    public boolean isSubPath(ListNode head, TreeNode root) {
+        // Base case: An empty list is always a subpath
+        if (head == null) {
+            return true;
+        }
+
+        // Base case: The list is not empty, but the tree is empty
+        if (root == null) {
+            return false;
+        }
+
+        // Using memoization to store results for each TreeNode
+        Map<TreeNode, Boolean> memo = new HashMap<>();
+
+        // Check if the linked list is a subpath starting from the current node or any node in the subtrees
+        return isSubPathHelper(head, root, memo) || isSubPath(head, root.left) || isSubPath(head, root.right);
+    }
+
+    /**
+     * Helper function to check if the linked list is a subpath starting from the current node.
+     *
+     * @param head The current node in the linked list.
+     * @param root The current node in the binary tree.
+     * @param memo Memoization map to store results.
+     * @return True if the linked list is a subpath, false otherwise.
+     */
+    private boolean isSubPathHelper(ListNode head, TreeNode root, Map<TreeNode, Boolean> memo) {
+        // All nodes in the list have matched
+        if (head == null) {
+            return true;
+        }
+
+        // The tree is empty, but the list is not
+        if (root == null) {
+            return false;
+        }
+
+        // Check if the result is already memoized
+        if (memo.containsKey(root)) {
+            return memo.get(root);
+        }
+
+        // Check if the current node matches the start of the subpath
+        boolean result = root.val == head.val && (
+                isSubPathHelper(head.next, root.left, memo) || 
+                isSubPathHelper(head.next, root.right, memo)
+        );
+
+        // Memoize the result for the current node
+        memo.put(root, result);
+
+        return result;
+    }
+}

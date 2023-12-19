@@ -1,0 +1,47 @@
+class Solution {
+    // Recursive function to traverse the binary tree in zigzag manner
+    public int ZigZag(TreeNode root, boolean zig, int cnt) {
+        // Base case: If the current node is null, return the current count
+        if (root == null) {
+            return cnt;
+        }
+
+        // If zig is false, it means moving from right to left in the zigzag path
+        if (!zig) {
+            // Recursively traverse the left child with zig set to false and increment count
+            int lft = ZigZag(root.left, false, 0);
+            // Recursively traverse the right child with zig set to true and increment count
+            int rgt = ZigZag(root.right, true, cnt + 1);
+            // Return the maximum count obtained from left and right traversals
+            return Math.max(lft, rgt);
+        }
+
+        // If zig is true, it means moving from left to right in the zigzag path
+        if (zig) {
+            // Recursively traverse the left child with zig set to false and increment count
+            int lft = ZigZag(root.left, false, cnt + 1);
+            // Recursively traverse the right child with zig set to true and reset count to 0
+            int rgt = ZigZag(root.right, true, 0);
+            // Return the maximum count obtained from left and right traversals
+            return Math.max(lft, rgt);
+        }
+
+        // This line is not reachable, but added for completeness
+        return cnt;
+    }
+
+    // Main function to initiate the zigzag traversal from the root node
+    public int longestZigZag(TreeNode root) {
+        // Check if the root node is null, return 0 if it is
+        if (root == null) {
+            return 0;
+        }
+
+        // Start zigzag traversal from the left child with zig set to false and count set to 0
+        int lft = ZigZag(root.left, false, 0);
+        // Start zigzag traversal from the right child with zig set to true and count set to 0
+        int rgt = ZigZag(root.right, true, 0);
+        // Return the maximum count obtained from left and right traversals
+        return Math.max(lft, rgt);
+    }
+}
