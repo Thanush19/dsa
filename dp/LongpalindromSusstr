@@ -1,0 +1,43 @@
+class Solution {
+    public String longestPalindrome(String s) {
+        // Check if the length of the input string is less than or equal to 1
+        if (s.length() <= 1) {
+            return s;
+        }
+
+        // Initialize variables to keep track of the longest palindrome substring
+        int st = 0;   // Start index of the longest palindrome substring
+        int e = 0;    // End index of the longest palindrome substring
+        int maxi = 1;  // Length of the longest palindrome substring
+
+        // Create a 2D boolean array to store whether substrings are palindromes or not
+        boolean[][] dp = new boolean[s.length()][s.length()];
+
+        // Iterate through the characters of the string
+        for (int i = 0; i < s.length(); i++) {
+            // Every single character is a palindrome by itself
+            dp[i][i] = true;
+
+            // Iterate through the characters before the current character (j < i)
+            for (int j = 0; j < i; j++) {
+                // Check if the characters at positions j and i are equal
+                // and if the inner substring (j+1 to i-1) is a palindrome
+                if (s.charAt(i) == s.charAt(j) && (i - j <= 2 || dp[j + 1][i - 1])) {
+                    // Mark the current substring (j to i) as a palindrome
+                    dp[j][i] = true;
+
+                    // If the length of the current palindrome is greater than maxi,
+                    // update maxi and the start and end indices
+                    if (maxi < i - j + 1) {
+                        maxi = i - j + 1;
+                        e = i;
+                        st = j;
+                    }
+                }
+            }
+        }
+
+        // Return the longest palindrome substring using substring(st, e + 1)
+        return s.substring(st, e + 1);
+    }
+}

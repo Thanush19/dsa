@@ -1,0 +1,48 @@
+
+Certainly! Let me explain the code and the approach used in your provided solution for the "Unique Paths" problem.
+
+Problem Statement:
+You are given a grid of size m x n representing a robot's movement. The robot starts from the top-left corner (0, 0) and needs to reach the bottom-right corner (m - 1, n - 1). The robot can only move either down or right at any point.
+
+Approach:
+The provided solution uses dynamic programming to solve the problem. The key idea is to calculate the number of unique paths to each cell in the grid and use these values to compute the total number of unique paths to the bottom-right corner.
+
+Dynamic Programming (DP) Table:
+Create a 2D array dp of size m x n to store the number of unique paths to each cell.
+Initialize the top row and left column of the dp table since there is only one way to reach each cell in these rows/columns (by moving either right or down).
+If i == 0 or j == 0, set dp[i][j] to 1.
+Update DP Table:
+Iterate over each cell (i, j) starting from the second row and second column.
+For each cell, update dp[i][j] by adding the number of unique paths from the cell above (i - 1, j) and the cell to the left (i, j - 1).
+Final Result:
+The final result is stored in dp[m - 1][n - 1], representing the total number of unique paths from the top-left corner to the bottom-right corner.
+Code Explanation:
+java
+Copy code
+class Solution {
+    public int uniquePaths(int m, int n) {
+        // Create a 2D array dp to store the number of unique paths
+        int[][] dp = new int[m][n];
+
+        // Initialize the top row and left column of the dp table
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 1;
+                } else {
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+                }
+            }
+        }
+
+        // Return the total number of unique paths to the bottom-right corner
+        return dp[m - 1][n - 1];
+    }
+}
+Time Complexity:
+The time complexity of this solution is O(m * n), where m and n are the dimensions of the grid.
+
+Space Complexity:
+The space complexity is also O(m * n) since we are using a 2D array to store the DP table.
+
+This approach efficiently computes the number of unique paths by building the solution from subproblems, and dynamic programming is well-suited for this type of 

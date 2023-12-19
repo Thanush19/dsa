@@ -1,0 +1,49 @@
+Layman Explanation
+for dp approach we have to follow the flow that given in question 
+i.e all three:- Insert, Delete, Replace.
+if character are same then we have decrement one one index.
+else we have to take minimum of all three recursive call which include 
+all three method insert, delete and replace. 
+and for all these three way we have to play with index, 
+for insert:- if you insert a character in word1 it means current state
+index is going to be same and decrement in index of word2.
+
+for delete:- if you delete a character in word1 it means current state
+index is going to be decrement by one and index of word2 is going to 
+be same.
+& in Replace we have to decrement current state index of both word.
+*/
+//Ref-> Anuj bhaiya video
+Code Explanation:
+The function minDistance initializes the memoization table dp and then calls the helper function with the indices of the last characters of both strings.
+The helper function is a recursive function that computes the minimum edit distance for the given substrings of x and y. It uses memoization to store the results of previously solved subproblems.
+The base cases check if either of the strings becomes empty, and in such cases, the remaining length of the non-empty string is returned.
+If the last characters of the strings are equal, no edit is needed, and the function recursively calls itself for the remaining substrings.
+If the characters are different, the function considers three possibilities (insert, delete, replace) and takes the minimum of the three recursive calls.
+The results are stored in the memoization table to avoid redundant computations.
+class Solution {
+    public int minDistance(String x, String y) {
+        int[][] dp = new int[x.length() + 1][y.length() + 1];
+        for (int[] i : dp) {
+            Arrays.fill(i, -1);
+        }
+        return helper(x, x.length() - 1, y, y.length() - 1, dp);
+    }
+
+    int helper(String x, int n, String y, int m, int[][] dp) {
+        if (n == -1) {
+            return m + 1;
+        }
+        if (m == -1) {
+            return n + 1;
+        }
+        if (dp[n][m] != -1)
+            return dp[n][m];
+        if (x.charAt(n) == y.charAt(m)) {
+            return dp[n][m] = helper(x, n - 1, y, m - 1, dp);
+        } else {
+            return dp[n][m] = 1 + Math.min(helper(x, n, y, m - 1, dp),
+                    Math.min(helper(x, n - 1, y, m, dp), helper(x, n - 1, y, m - 1, dp)));
+        }
+    }
+}
