@@ -1,0 +1,41 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+
+class Solution {
+    /**
+     * Prunes the given binary tree, removing subtrees that do not contain a '1'.
+     * @param root The root of the binary tree to be pruned.
+     * @return The pruned binary tree.
+     */
+    public TreeNode pruneTree(TreeNode root) {
+        // Base case: If the root is null, there is nothing to prune.
+        if(root == null){
+            return null;
+        }
+
+        // Recursively prune the left and right subtrees.
+        root.left = pruneTree(root.left);
+        root.right = pruneTree(root.right);
+
+        // If the current node is a leaf node with value '0', prune it (return null).
+        if(root.left == null && root.right == null && root.val == 0) {
+            return null;
+        }
+
+        // Return the root after pruning.
+        return root;
+    }
+}
