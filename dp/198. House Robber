@@ -1,0 +1,25 @@
+class Solution {
+    // Function to calculate the maximum amount of money that can be robbed
+    public int rob(int[] nums) {
+        // Create an array to store the maximum amount of money that can be robbed from each house
+        int[] dp = new int[nums.length];
+        
+        // If there is only one house, return the money in that house
+        if (nums.length < 2) {
+            return nums[0];
+        }
+        
+        // Initialize the first two elements of the dp array based on the money in the first two houses
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0], nums[1]);
+        
+        // Iterate over the remaining houses to calculate the maximum amount of money that can be robbed
+        for (int i = 2; i < nums.length; i++) {
+            // Choose the maximum amount between robbing the current house and skipping it
+            dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+        }
+        
+        // The last element of the dp array contains the maximum amount of money that can be robbed
+        return dp[nums.length - 1];
+    }
+}
