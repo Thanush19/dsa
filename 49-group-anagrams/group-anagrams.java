@@ -1,32 +1,17 @@
-
-
 class Solution {
-    public String getSignature(String s) {
-        int[] count = new int[26];
-        for (char c : s.toCharArray()) {
-            count[c - 'a']++;
-        }
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 26; i++) {
-            if (count[i] != 0) {
-                sb.append((char) ('a' + i)).append(count[i]);
-            }
-        }
-        return sb.toString();
-    }
-
     public List<List<String>> groupAnagrams(String[] strs) {
-        List<List<String>> result = new ArrayList<>();
-        Map<String, List<String>> groups = new HashMap<>();
-
-        for (String s : strs) {
-            groups.computeIfAbsent(getSignature(s), k -> new ArrayList<>()).add(s);
-        }
-
-        result.addAll(groups.values());
-
-        return result;
+                Map<String,List<String>> mp = new HashMap<>();
+                for(String i: strs){
+                    char[] tmp1 = i.toCharArray();
+                    Arrays.sort(tmp1);
+                    String tmp = new String(tmp1);
+                    if(!mp.containsKey(tmp)) mp.put(tmp,new ArrayList<>());
+                    mp.get(tmp).add(i);
+                }
+                List<List<String>> list = new ArrayList<>();
+                for(Map.Entry<String,List<String>> set: mp.entrySet()){
+                    list.add(set.getValue());
+                }
+                return list;
     }
 }
-
