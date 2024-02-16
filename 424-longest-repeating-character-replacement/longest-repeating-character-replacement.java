@@ -1,28 +1,25 @@
-class Solution 
-{
-  public int characterReplacement(String s, int k) 
-  {
-      // O(n) time | O(1) space
-      int[] counter = new int[26];
-      int res = 0;
-      
-      int left = 0, right = 0;
-      int mostFrequentCharCount = 0;
-      
-      while(right < s.length())
-      {
-          counter[s.charAt(right) - 'A'] += 1;
-          mostFrequentCharCount = Math.max(mostFrequentCharCount, counter[s.charAt(right) - 'A']);
-          
-          if(right - left + 1 - mostFrequentCharCount > k)
-          {
-              // current window is invalid if the condition meets so we move left pointer forward
-              counter[s.charAt(left) - 'A'] -= 1;
-              left++; 
-          }
-          res = Math.max(res, right - left + 1);
-          right++;
-      }
-      return res;
-  }
+class Solution {
+    public int characterReplacement(String s, int k) {
+        int l = 0, r = 0;
+        int[] cnt = new int[26];
+        int most = 0;
+        int maxi = 0;
+
+        while (r < s.length()) {
+            if (Character.isUpperCase(s.charAt(r))) {
+                cnt[s.charAt(r) - 'A']++;
+                most = Math.max(most, cnt[s.charAt(r) - 'A']);
+            }
+
+            if (r - l + 1 - most > k) {
+                if (Character.isUpperCase(s.charAt(l))) {
+                    cnt[s.charAt(l) - 'A']--;
+                }
+                l++;
+            }
+            maxi = Math.max(r - l + 1, maxi);
+            r++;
+        }
+        return maxi;
+    }
 }
