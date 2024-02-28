@@ -14,25 +14,35 @@
  * }
  */
 class Solution {
-    public int findBottomLeftValue(TreeNode root) {
-        if(root==null) return 0;
-        Queue<TreeNode> q = new LinkedList<>();
-        q.offer(root);
-        int res=0;
-        while(!q.isEmpty()){
-            int n = q.size();
-            for(int i =0;i<n;i++){
-                TreeNode temp= q.poll();
-                if(i==0) res= temp.val;
-                if(temp.left!=null) q.offer(temp.left);
-                if(temp.right!=null) q.offer(temp.right);
-            }
-
-            
+    
+    class Pair {
+        int lvl;
+        int node;
+        Pair(int lvl, int node) {
+            this.lvl = lvl;
+            this.node = node;
         }
-        return res;
+    }
 
+    public int findBottomLeftValue(TreeNode root) {
+        PriorityQueue<Pair> q = new PriorityQueue<>((a, b) -> b.lvl - a.lvl);
+        fn(root, q, 1);
+        return q.poll().node;
+    }
 
+    int fn(TreeNode root, Queue<Pair> q, int lvl) {
+        if (root == null)
+            return 0;
+
+        int l = fn(root.left, q, lvl + 1);
+        int r = fn(root.right, q, lvl + 1);
         
+        int currentLevel = Math.max(l, r) + 1;
+
+        if (root.left == null && root.right == null) {
+            q.offer(new Pair(lvl, root.val));
+        }
+
+        return currentLevel;
     }
 }
