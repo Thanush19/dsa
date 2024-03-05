@@ -1,0 +1,31 @@
+import java.util.List;
+
+public class Solution {
+    static class Graph {
+        boolean dfs(int node, int parent, List<List<Integer>> adj, boolean[] vis) {
+            vis[node] = true;
+
+            for (int neighbor : adj.get(node)) {
+                if (!vis[neighbor]) {
+                    if (dfs(neighbor, node, adj, vis)) {
+                        return true; // Cycle detected
+                    }
+                } else if (neighbor != parent) {
+                    return true; // Back edge found, indicating a cycle
+                }
+            }
+
+            return false; // No cycle found in this DFS traversal
+        }
+
+        boolean detectCycle(int v, List<List<Integer>> adj) {
+            boolean[] vis = new boolean[v];
+            for (int i = 0; i < v; i++) {
+                if (!vis[i] && dfs(i, -1, adj, vis)) {
+                    return true; // Cycle detected
+                }
+            }
+            return false; // No cycle found
+        }
+    }
+}
