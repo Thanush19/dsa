@@ -1,32 +1,42 @@
 class Solution {
-    int fn(int n, int m, int[][] dp, int[][] a) {
-        if (n < 0 || m < 0 || a[n][m] == 1) {
-            return 0;
-        }
-        if (n == 0 && m == 0) {
-            return 1;
-        }
-        if (dp[n][m] != -1) {
-            return dp[n][m];
-        }
-        int left = fn(n, m - 1, dp, a);
-        int right = fn(n - 1, m, dp, a);
-        return dp[n][m] = left + right;
-    }
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        
+        int m=obstacleGrid.length;
+        int n=obstacleGrid[0].length;
+        
+        int[][] dp=new int[m][n];
+        
+        for(int i=m-1;i>=0;i--){
+            
+            for(int j=n-1;j>=0;j--){
+                
+                if(obstacleGrid[i][j]==1){
+                    dp[i][j]=0;
+                }
+                else if(i==m-1 && j==n-1) {
+                    dp[i][j]=1;
+                }else{
 
-    public int uniquePathsWithObstacles(int[][] a) {
-        int n = a.length;
-        int m = a[0].length;
-        if (n == 1 && m == 1 && a[0][0] != 1) {
-            return 1;
+                    int up=0;
+                    int left=0;
+                    
+                    if(j+1<n){
+                       up=dp[i][j+1]; 
+                    }
+                    
+                    if(i+1<m){
+                         left=dp[i+1][j];
+                    }
+                   
+                    
+                    dp[i][j]=up+left;
+                }
+            }
         }
-        if (n == 1 && m == 1 && a[0][0] == 1) {
-            return 0;
-        }
-        int[][] dp = new int[n][m];
-        for (int[] i : dp) {
-            Arrays.fill(i, -1);
-        }
-        return fn(n - 1, m - 1, dp, a);
+        
+        return dp[0][0];
+        
     }
+    
+    
 }
