@@ -15,7 +15,24 @@ class Solution {
     public int maxProfit(int[] a) {
         int n = a.length;
         int[][] dp = new int[n + 1][2];
-        for (int[] i : dp) Arrays.fill(i, -1);
-        return fn(a, 0, 0, dp);
+      dp[n][0] = dp[n][1] = 0;
+
+        int profit = 0;
+
+        // Iterate through the aay in reverse to calculate the maximum profit
+        for (int ind = n - 1; ind >= 0; ind--) {
+            for (int buy = 0; buy <= 1; buy++) {
+                if (buy == 0) { // We can buy the stock
+                    profit = Math.max(0 + dp[ind + 1][0], -a[ind] + dp[ind + 1][1]);
+                }
+
+                if (buy == 1) { // We can sell the stock
+                    profit = Math.max(0 + dp[ind + 1][1], a[ind] + dp[ind + 1][0]);
+                }
+
+                dp[ind][buy] = profit;
+            }
+        }
+        return dp[0][0];
     }
 }
