@@ -1,27 +1,26 @@
 class Solution {
-    int fn(int[] a , int k ,int idx, int flag, int cap ,   int[][][] dp){
-        if(idx==a.length || cap ==k) return 0;
-        if(dp[idx][flag][cap]!=-1) return dp[idx][flag][cap];
-        int pro=0;
-        if(flag==0){
-            pro = Math.max(-a[idx]+fn(a,k,idx+1,1,cap,dp),fn(a,k,idx+1,0,cap,dp));
-        }
-        else{
-            pro= Math.max(a[idx]+fn(a,k,idx+1,0,cap+1,dp),fn(a,k,idx+1,1,cap,dp));
-        }
-        return dp[idx][flag][cap]=pro;
-    }
-    public int maxProfit(int k, int[] a) {
-        int n  = a.length;
-        int[][][] dp = new int[n+1][2][k+1];
-        for(int i = 0 ; i<= n ; i++){
-            for(int j = 0; j<2 ; j++){
-                for(int z = 0 ; z<=k;z++){
-                    dp[i][j][z]=-1;
+    public int maxProfit(int k, int[] prices) {
+        int n = prices.length;
+         int[][][] dp = new int[n + 1][2][k + 1];
+        
+        // As dp array is initialized to 0, we have already covered the base case
+        
+        // Iterate through the array and fill in the dp array
+        for (int ind = n - 1; ind >= 0; ind--) {
+            for (int buy = 0; buy <= 1; buy++) {
+                for (int cap = 1; cap <= k; cap++) {
+                    if (buy == 0) { // We can buy the stock
+                        dp[ind][buy][cap] = Math.max(0 + dp[ind + 1][0][cap], 
+                                -prices[ind] + dp[ind + 1][1][cap]);
+                    } else { // We can sell the stock
+                        dp[ind][buy][cap] = Math.max(0 + dp[ind + 1][1][cap],
+                                prices[ind] + dp[ind + 1][0][cap - 1]);
+                    }
                 }
             }
         }
-        return fn(a,k,0,0,0,dp);
+        
+        return dp[0][0][k];
         
     }
 }
