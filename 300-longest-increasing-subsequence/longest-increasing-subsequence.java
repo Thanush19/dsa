@@ -1,20 +1,23 @@
 class Solution {
-    public int lengthOfLIS(int[] nums) {
-        int ans=0;
-        int n=nums.length;
-        if(n==1) return 1;
-        int[] dp=new int[n];
-        dp[0]=1;
-        for(int i=1;i<n;i++){
-            int length=0;
-            for(int j=0;j<i;j++){
-                if(nums[j]<nums[i]){
-                    length=Math.max(length,dp[j]);
-                }
-            }
-            dp[i]=1+length;
-            ans=Math.max(ans,dp[i]);
+    int fn(int[] a, int idx , int prev, int[][] dp) {
+        if(idx==a.length) return 0;
+        if(dp[idx][prev+1]!=-1) return dp[idx][prev+1];
+        //without taking the element , we are just moving to nxt elemt , so prev will be same; , i dont add extra value in len
+        int no = 0+fn(a,idx+1,prev,dp); 
+        int yes = 0;
+        if(prev==-1 ||(prev >= 0 && a[idx] > a[prev])){
+            yes =1+ fn(a,idx+1,idx,dp);
         }
-        return ans;
+        dp[idx][prev+1]=Math.max(no,yes);
+        //coordinate change to +1 for prev , because it starts from -1, i cant store store -1 in dp, that's why'
+        return dp[idx][prev+1];
+
     }
-}//TC:O(n^2), SC:O(n)
+    public int lengthOfLIS(int[] a) {
+        int n = a.length;
+        int[][] dp = new int[n][n+1];
+        for(int[] i : dp) Arrays.fill(i,-1);
+        return fn(a,0,-1,dp);
+        
+    }
+}
