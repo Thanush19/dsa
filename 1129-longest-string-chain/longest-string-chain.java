@@ -19,7 +19,7 @@ class Solution {
         int[] dp = new int[n];
         Arrays.fill(dp,1);
         int maxi = 1;
-        Arrays.sort(words,comp);
+        Arrays.sort(words,(a,b)->a.length()-b.length());
         for(int i = 0; i < n; i++){
             for(int j = 0; j < i; j++){
                 if(compare(words[i],words[j]) && dp[i] < 1 + dp[j]){
