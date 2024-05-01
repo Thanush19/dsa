@@ -1,46 +1,42 @@
-import java.util.*;
+//https://leetcode.com/problems/find-eventual-safe-states/solutions/3756391/ex-amazon-explains-a-solution-with-a-video-python-javascript-java-and-c
 
 class Solution {
-    public List<Integer> eventualSafeNodes(int[][] graph) {
-        List<Integer> result = new ArrayList<>();
-        int n = graph.length;
-        int[] state = new int[n]; // 0: unvisited, 1: visited, 2: safe
-        List<List<Integer>> adjList = new ArrayList<>();
-
-        // Initialize adjacency list
-        for (int i = 0; i < n; i++) {
-            adjList.add(new ArrayList<>());
-            for (int j : graph[i]) {
-                adjList.get(i).add(j);
-            }
-        }
-
-        // Perform DFS from each node
-        for (int i = 0; i < n; i++) {
-            if (isSafe(i, adjList, state)) {
-                result.add(i);
-            }
-        }
-
-        return result;
+    boolean dfs(int node, int[] vis, List<List<Integer>> adj) {
+    if (vis[node] == 2) {
+        return true; // If it is 2, it can lead to a terminal node
     }
-
-    // DFS to determine if the node is eventual safe
-    private boolean isSafe(int node, List<List<Integer>> adjList, int[] state) {
-        if (state[node] != 0) {
-            return state[node] == 2; // If already visited and safe, return true
+    if (vis[node] == 1) {
+        return false; // If it is 1, it means there's a cycle, so it's not an eventual safe node
+    }
+    vis[node] = 1; // Mark as visited
+    for (int nei : adj.get(node)) {
+        if (!dfs(nei, vis, adj)) {
+            return false;
         }
+    }
+    vis[node] = 2; // Mark as a terminal node
+    return true;
+}
 
-        state[node] = 1; // Mark node as visited
-
-        // Traverse adjacent nodes
-        for (int next : adjList.get(node)) {
-            if (!isSafe(next, adjList, state)) {
-                return false; // If any adjacent node is not safe, current node is not safe
+    //if the terminal node has no outbount nodes , it has to be marked as terminal node
+    public List<Integer> eventualSafeNodes(int[][] a) {
+        int n =a.length;
+         List<Integer> ans = new ArrayList<>();
+        List<List<Integer>> adj = new ArrayList<>();
+        for(int i =0;i<n;i++) adj.add(new ArrayList<>());
+        for(int i =0;i<a.length;i++){
+            for(int j =0;j<a[i].length;j++){
+                adj.get(i).add(a[i][j]);
             }
         }
+        int[] vis = new int[n];//2--> term.. node ,1---> visited , 0---> not yet vis
+        for(int i =0;i<n;i++){
+            if(dfs(i,vis,adj)){
+                ans.add(i);
+            }
 
-        state[node] = 2; // Mark node as safe
-        return true;
+        }
+        return ans;
+        
     }
 }
