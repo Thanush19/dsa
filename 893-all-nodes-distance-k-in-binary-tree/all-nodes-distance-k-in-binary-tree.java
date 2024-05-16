@@ -8,12 +8,13 @@
  * }
  */
 class Solution {
-    void findPar(HashMap<TreeNode,TreeNode> par,TreeNode root){
+   void fnTofindPar(   HashMap<TreeNode,TreeNode> par,TreeNode root){
+        if(root==null) return;
         Queue<TreeNode> q = new LinkedList<>();
         q.offer(root);
         while(!q.isEmpty()){
-            int size = q.size();
-            for(int i = 0 ; i<size;i++){
+            int n = q.size();
+            for(int i = 0 ;i<n;i++){
                 TreeNode p = q.poll();
                 if(p.left!=null) {
                     par.put(p.left,p);
@@ -25,49 +26,47 @@ class Solution {
                 }
             }
         }
-
-
     }
     public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
-        List<Integer> ans =  new ArrayList<>();
-        if(root==null || target==null) return ans;
         HashMap<TreeNode,TreeNode> par = new HashMap<>();
-        findPar(par,root);
+        fnTofindPar(par,root);
+        List<Integer> ans = new ArrayList<>();
         HashMap<TreeNode,Boolean> vis = new HashMap<>();
-        int cnt=0;
+        vis.put(target,true);
         Queue<TreeNode> q = new LinkedList<>();
         q.offer(target);
-        vis.put(target,true);
 
 
+        int cnt =0;
         while(!q.isEmpty()){
-            
             if(cnt==k) break;
             cnt++;
-      
-            int size = q.size();
-
-            for (int i = 0; i < size; i++) {
+            int n = q.size();
+            for(int i = 0;i<n ;i++){
                 TreeNode p = q.poll();
-                if (p.left != null && vis.get(p.left) == null) {
+                if(p.left!=null && vis.get(p.left)==null){
+                    vis.put(p.left,true);
                     q.offer(p.left);
-                    vis.put(p.left, true); // Mark left child as visited
+
                 }
-                if (p.right != null && vis.get(p.right) == null) {
+                if(p.right!=null && vis.get(p.right)==null){
+                    vis.put(p.right,true);
                     q.offer(p.right);
-                    vis.put(p.right, true); // Mark right child as visited
+
+
                 }
-                TreeNode parent = par.get(p);
-                if (parent != null && vis.get(parent) == null) {
-                    q.offer(parent);
-                    vis.put(parent, true); // Mark parent as visited
+                if(par.get(p)!=null && vis.get(par.get(p))==null){
+                    vis.put(par.get(p),true);
+                    q.offer(par.get(p));
                 }
+
             }
+           
         }
-        while(!q.isEmpty()){
-            ans.add(q.poll().val);
+         while(!q.isEmpty()){
+                ans.add(q.poll().val);
         }
-        return ans;
+            return ans;
 
         
     }
