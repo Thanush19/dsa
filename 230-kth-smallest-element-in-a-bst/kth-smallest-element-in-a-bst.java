@@ -15,33 +15,27 @@
  */
 class Solution {
     public int kthSmallest(TreeNode root, int k) {
-        // Initialize a stack for in-order traversal
-        Deque<TreeNode> stack = new ArrayDeque<>();
-        TreeNode current = root;
-        
-        // Variable to track the count of visited nodes
-        int count = 0;
-        
-        // Perform in-order traversal
-        while (current != null || !stack.isEmpty()) {
-            // Traverse left subtree and push nodes onto stack
-            while (current != null) {
-                stack.push(current);
-                current = current.left;
+        PriorityQueue<Integer> pq = new PriorityQueue<>((x,y)->x-y);
+        Queue<TreeNode> q = new LinkedList<>();
+        if(root==null) return 0;
+        q.offer(root);
+        while(!q.isEmpty()){
+            int n = q.size();
+            for(int i =0;i<n;i++){
+                TreeNode p = q.poll();
+                pq.offer(p.val);
+                if(p.left!=null){
+                    q.offer(p.left);
+                }
+                if(p.right!=null){
+                    q.offer(p.right);
+                }
             }
-            
-            // Pop node from stack
-            current = stack.pop();
-            count++;
-            
-            // If count equals k, return the value of current node
-            if (count == k)
-                return current.val;
-            
-            // Move to right subtree
-            current = current.right;
         }
-        
-        return -1; // BST is invalid or k is out of range
+        while(k-- >1){
+            pq.poll();
+             
+        }
+        return pq.poll();
     }
 }
