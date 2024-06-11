@@ -16,9 +16,21 @@ class Solution {
         int n = a.length;
         int m = a[0].length;
         int[][] dp = new int[n][m];
-        for (int[] row : dp) {
-            Arrays.fill(row, -1);
+        // for (int[] row : dp) {
+        //     Arrays.fill(row, -1);
+        // }
+        // return fn(a, n, m, n - 1, m - 1, dp);
+        dp[0][0]=a[0][0];
+        for(int i =0;i<n;i++){
+            for(int j =0;j<m;j++){
+                if(i==0 && j==0) continue;
+
+                
+        int up = i > 0 ? dp[i-1][j]: Integer.MAX_VALUE;
+        int left = j > 0 ? dp[i][j-1] : Integer.MAX_VALUE;
+                dp[i][j]=a[i][j]+Math.min(up,left);
+            }
         }
-        return fn(a, n, m, n - 1, m - 1, dp);
+        return dp[n-1][m-1];
     }
 }
