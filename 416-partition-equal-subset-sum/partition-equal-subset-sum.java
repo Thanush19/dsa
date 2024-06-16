@@ -1,22 +1,29 @@
 class Solution {
-    boolean fn(int[]a , int[][] dp ,int i , int tar){
-        if(i==0) return a[i]==tar;
-        if(tar==0) return true;
-        if(dp[i][tar]!=-1) return dp[i][tar]==1?true:false;
-        boolean take=false;
-        if(a[i]<=tar) take = fn(a,dp,i-1,tar-a[i]);
-        boolean not = fn(a,dp,i-1,tar);
-        dp[i][tar]= take||not ? 1:0;
-        return take||not;
-        
+    boolean fn(int[][] dp,int[] a , int k , int i){
+    
+        if(k==0) return true;
+        if (i < 0 || k < 0) return false; 
+        if(dp[i][k]!=-1) return dp[i][k]==1;
+        boolean notTake = fn(dp, a, k, i - 1);
+        boolean take = false;
+        if (a[i] <= k) {
+            take = fn(dp, a, k - a[i], i - 1);
+        }
+        dp[i][k] = (take || notTake) ? 1 : 0;
+        return take || notTake;
+
+
     }
-    public boolean canPartition(int[] nums) {
-        int sum =  Arrays.stream(nums).sum();
+    public boolean canPartition(int[] a) {
+        int sum = Arrays.stream(a).sum();
+        int n =a.length;
         if(sum%2!=0) return false;
-        int[][] dp = new int[nums.length][(sum/2)+1];
-        for(int[] i : dp) Arrays.fill(i,-1);
-        return fn(nums,dp,nums.length-1,sum/2);
-        
+        else{
+            int[][] dp = new int[n][(sum/2)+1];
+            int k = sum/2;
+            for(int[] i :dp) Arrays.fill(i,-1);
+            return fn(dp,a,k,n-1);
+        }
         
     }
 }
