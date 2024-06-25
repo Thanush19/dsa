@@ -1,33 +1,31 @@
 class Solution {
-    private boolean compare(String s1, String s2){
+    boolean compare(String s1,String s2){
         if(s1.length() != s2.length() + 1) return false;
-        int first = 0;
-        int second = 0;
-        while(first < s1.length()){
-            if(second < s2.length() && s1.charAt(first) == s2.charAt(second)){
-                first++;
-                second++;
-            }else{
-                first++;
+        int i =0,j=0;
+        while(i<s1.length() && j < s2.length()){
+            if(s1.charAt(i)==s2.charAt(j)){
+                i++;
+                j++;
             }
+            else i++;
         }
-        return (first == s1.length() && second == s2.length());
+        return j==s2.length() ;
+
     }
-    private Comparator<String> comp = ((s1,s2) -> s1.length() - s2.length());
-    public int longestStrChain(String[] words) {
-        int n = words.length;
+    public int longestStrChain(String[] w) {
+        int n = w.length;
+        Arrays.sort(w,(s1,s2)->s1.length()-s2.length());
         int[] dp = new int[n];
         Arrays.fill(dp,1);
-        int maxi = 1;
-        Arrays.sort(words,(a,b)->a.length()-b.length());
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < i; j++){
-                if(compare(words[i],words[j]) && dp[i] < 1 + dp[j]){
-                    dp[i] = 1 + dp[j];
+        for(int i =1;i<n;i++){
+            for(int j=0;j<i;j++){
+                if(compare(w[i],w[j])&& 1+dp[j]>dp[i]){
+                    dp[i]=1+dp[j];
                 }
             }
-            maxi = Math.max(maxi,dp[i]);
         }
-        return maxi;
+        return Arrays.stream(dp).max().getAsInt();
+
+        
     }
 }
